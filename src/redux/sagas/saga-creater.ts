@@ -1,3 +1,5 @@
+import { takeLatest } from 'redux-saga/effects';
+
 type SliceLike = {
     name: string;
     actions: { [K: string]: (...args: any[]) => any }
@@ -17,3 +19,11 @@ export type ExtractPayload<T extends SliceLike, TPath extends ExtractActionPaths
         : never;
 
 
+export const createSaga = <
+    T extends SliceLike,
+    TPath extends ExtractActionPaths<T>,
+>(path: TPath, handler: (_: ExtractPayload<T, TPath>) => Generator<unknown, unknown>) => {
+    return function* () {
+        yield takeLatest(path, handler);
+    }
+}

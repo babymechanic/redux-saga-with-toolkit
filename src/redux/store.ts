@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import createSagaMiddleware from 'redux-saga'
 import { charactersReducer } from './slices/rick-and-morty/slice';
-import { charactersSaga } from './sagas/characters-saga';
+import { rootSaga } from './sagas/characters-saga';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
 // Create the saga middleware
@@ -17,7 +17,7 @@ export const store = configureStore({
 })
 
 // Then run the saga
-sagaMiddleware.run(charactersSaga);
+sagaMiddleware.run(rootSaga);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

@@ -1,16 +1,13 @@
-import { call, put, SagaReturnType, takeLatest } from 'redux-saga/effects';
+import { call, put, SagaReturnType } from 'redux-saga/effects';
 import { Page } from '../../services/rick-and-morty/page';
 import { Character } from '../../services/rick-and-morty/character';
 import {
-    CharacterActionPaths,
     CharactersSlice,
     FetchCharactersQuery,
     getCharactersFailure,
     getCharactersSuccess
 } from '../slices/rick-and-morty/slice';
-import { ExtractPayload } from './saga-creater';
-
-const actionPath = 'characters/getCharactersFetch' satisfies CharacterActionPaths;
+import { createSaga } from './saga-creater';
 
 const callService = async (payload: FetchCharactersQuery): Promise<Page<Character>> => {
     console.log({ payload });
@@ -18,15 +15,16 @@ const callService = async (payload: FetchCharactersQuery): Promise<Page<Characte
     return result.json();
 };
 
-function* workGetCharactersFetch(action: ExtractPayload<CharactersSlice, typeof actionPath>) {
-    try {
-        const response: SagaReturnType<typeof callService> = yield call(callService, action.payload);
-        yield put(getCharactersSuccess(response.results));
-    } catch (error) {
-        yield put(getCharactersFailure(error));
+const characterSaga = createSaga<CharactersSlice, 'characters/getCharactersFetch'>('characters/getCharactersFetch', function* (action) {
+        try {
+            const response = (yield call(callService, action.payload)) as SagaReturnType<typeof callService>;
+            yield put(getCharactersSuccess(response.results));
+        } catch (error) {
+            yield put(getCharactersFailure(error));
+        }
     }
-}
+);
 
-export function* charactersSaga() {
-    yield takeLatest(actionPath, workGetCharactersFetch)
+export function* rootSaga() {
+    yield characterSaga()
 }
