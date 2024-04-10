@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { CharactersState } from './state';
 import { Character } from '../../../services/rick-and-morty/character';
-import { ExtractActionPaths } from '../../sagas/saga-creater';
 
 const initialState: CharactersState = {
     data: [],
@@ -35,4 +34,3 @@ const charactersSlice = createSlice({
 export const { getCharactersFetch, getCharactersSuccess, getCharactersFailure } = charactersSlice.actions;
 export const charactersReducer = charactersSlice.reducer;
 export type CharactersSlice = typeof charactersSlice;
-export type CharacterActionPaths = ExtractActionPaths<CharactersSlice>;

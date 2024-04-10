@@ -7,7 +7,7 @@ import {
     getCharactersFailure,
     getCharactersSuccess
 } from '../slices/rick-and-morty/slice';
-import { createSaga } from './saga-creater';
+import { createSaga, ExtractActionPaths } from './saga-creater';
 
 const callService = async (payload: FetchCharactersQuery): Promise<Page<Character>> => {
     console.log({ payload });
@@ -15,7 +15,8 @@ const callService = async (payload: FetchCharactersQuery): Promise<Page<Characte
     return result.json();
 };
 
-const characterSaga = createSaga<CharactersSlice, 'characters/getCharactersFetch'>('characters/getCharactersFetch', function* (action) {
+const path = 'characters/getCharactersFetch' satisfies ExtractActionPaths<CharactersSlice>;
+const characterSaga = createSaga<CharactersSlice, typeof path>(path, function* (action) {
         try {
             const response = (yield call(callService, action.payload)) as SagaReturnType<typeof callService>;
             yield put(getCharactersSuccess(response.results));
