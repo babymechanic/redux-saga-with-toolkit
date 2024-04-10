@@ -8,7 +8,6 @@ function App() {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        console.log('was called because');
         dispatch(getCharactersFetch({ name: 'terry', page: 100 }))
     }, [dispatch]);
 
