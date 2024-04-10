@@ -10,13 +10,15 @@ import {
 } from '../slices/rick-and-morty/slice';
 import { ExtractPayload } from './saga-creater';
 
+const actionPath = 'characters/getCharactersFetch' satisfies CharacterActionPaths;
+
 const callService = async (payload: FetchCharactersQuery): Promise<Page<Character>> => {
     console.log({ payload });
     const result = await fetch('https://rickandmortyapi.com/api/character/');
     return result.json();
 };
 
-function* workGetCharactersFetch(action: ExtractPayload<CharactersSlice, 'characters/getCharactersFetch'>) {
+function* workGetCharactersFetch(action: ExtractPayload<CharactersSlice, typeof actionPath>) {
     try {
         const response: SagaReturnType<typeof callService> = yield call(callService, action.payload);
         yield put(getCharactersSuccess(response.results));
@@ -26,5 +28,5 @@ function* workGetCharactersFetch(action: ExtractPayload<CharactersSlice, 'charac
 }
 
 export function* charactersSaga() {
-    yield takeLatest('characters/getCharactersFetch' satisfies CharacterActionPaths, workGetCharactersFetch)
+    yield takeLatest(actionPath, workGetCharactersFetch)
 }
