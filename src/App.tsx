@@ -4,12 +4,12 @@ import { useAppDispatch, useAppSelector } from './redux/store';
 import { getCharactersFetch } from './redux/slices/rick-and-morty/slice';
 
 function App() {
-
     const characters = useAppSelector(x => x.characters.data);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        dispatch(getCharactersFetch())
+        console.log('was called because');
+        dispatch(getCharactersFetch({ name: 'terry', page: 100 }))
     }, [dispatch]);
 
     return (

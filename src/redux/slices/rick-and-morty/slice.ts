@@ -8,11 +8,16 @@ const initialState: CharactersState = {
     error: undefined
 };
 
+export type FetchCharactersQuery = {
+    page: number;
+    name: string;
+}
+
 const slice = createSlice({
     name: 'characters',
     initialState,
     reducers: {
-        getCharactersFetch(state: CharactersState) {
+        getCharactersFetch(state: CharactersState, _action: PayloadAction<FetchCharactersQuery>) {
             state.isLoading = true;
         },
         getCharactersSuccess(state: CharactersState, action: PayloadAction<Character[]>) {
